@@ -1,0 +1,6 @@
+2025/05/05-14:50:07.490 4607 Reusing MANIFEST /Users/philipp/Desktop/Web_Projects/AutoDiary/C:/Users/Phil/AppData/Local/Google/Chrome/User Data/Default/Local Storage/leveldb/MANIFEST-000001
+2025/05/05-14:50:07.494 4607 Recovering log #24
+2025/05/05-14:50:07.494 4607 Reusing old log /Users/philipp/Desktop/Web_Projects/AutoDiary/C:/Users/Phil/AppData/Local/Google/Chrome/User Data/Default/Local Storage/leveldb/000024.log 
+2025/05/05-14:50:44.326 4609 Level-0 table #27: started
+2025/05/05-14:50:44.330 4609 Level-0 table #27: 22752 bytes OK
+2025/05/05-14:50:44.340 4609 Delete type=0 #24

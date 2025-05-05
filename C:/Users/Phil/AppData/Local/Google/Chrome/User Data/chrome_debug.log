@@ -1,0 +1,7 @@
+[5207:19875:0505/145048.050412:INFO:components/enterprise/browser/controller/chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
+[5207:19875:0505/145049.196172:INFO:CONSOLE:157] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yY/r/mkiNlxq8gdy.js (157)
+[5207:19875:0505/145053.551751:INFO:CONSOLE:77] "ErrorUtils caught an error:
+
+Converting to a string will drop content data. Hash="undefined" Translation="{user_name} hat {names} entfernt." Content="{"key":null,"ref":null,"props":{"contact":{"id":"41766739316@c.us","name":"Franzi","shortName":"Franzi","pushname":"Franzi","type":"in","isContactSyncCompleted":1,"textStatusLastUpdateTime":-1,"syncToAddressbook":true},"showNotifyName":true,"elevated" (type=object,Object)
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. [object Object]", source: https://static.whatsapp.net/rsrc.php/v4/ys/r/nR_4noDK0oc.js (77)

@@ -38,11 +38,11 @@ async def CreateWAMessageEntryService(
             result = await db.create(RecordID('Message', f'{chat_name}:{name}:{iso_time}'), {
                 "chat_name": chat_name,
                 "name": name,
-                "time": iso_time,
+                "time": f"d'{iso_time}'",
                 "message": message_text,
-                "entry_creation": datetime.now().isoformat()
+                "entry_creation": f"d'{datetime.now().isoformat()}'"
             })
-        
+            
             return {
                 "status": "success", 
                 "result": result

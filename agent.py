@@ -47,18 +47,6 @@ class Assistant(Agent):
         logger.info(f"Looking up the date")
 
         return str(date.today())
-    
-
-
-    # Tool zur Verwendung (Suche) einer SurrealDB Datenbank
-    @function_tool
-    async def db_example(self, context: RunContext, search_string: str):
-        '''
-        Verwende dieses Tool, um die Whatsapp Chats aus der Datenbank zu bekommen
-        '''
-        logger.info(f"Using the Database")
-
-        return await GetEntryService(search_string=search_string)
 
 
     # Beispiel Tool, was zeigt wie man erfolgreich zwei Parameter mit einer Funktion erfassen kann

@@ -8,7 +8,7 @@ from whatsapp_handling.messages import collect_messages
 
 
 
-def iterate_chats(driver):
+async def iterate_chats(driver):
 
     print("Listing all chats... \n")
     
@@ -51,10 +51,10 @@ def iterate_chats(driver):
                 element.click()
                 print(f"✅ Clicked on chat {n}: {chat_name} \n")
 
-                collect_messages(driver, chat_name)
+                await collect_messages(driver, chat_name)
 
             else:
-                print(f"❌ Chat element not clickable for: {name}")
+                print(f"❌ Chat element not clickable for: {chat_name}")
     
             time.sleep(1)
 

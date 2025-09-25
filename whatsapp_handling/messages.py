@@ -4,6 +4,8 @@ import pytz
 
 from datetime import datetime
 
+from db.dbService import CreateWAMessageEntryService
+
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
@@ -24,7 +26,7 @@ def parse_whatsapp_time_with_tz(time_str):
     return dt_tz.isoformat() 
 
 
-def collect_messages(driver, chat_name):
+async def collect_messages(driver, chat_name):
 
     time.sleep(5)
 
@@ -49,7 +51,7 @@ def collect_messages(driver, chat_name):
             # The actual message text is inside a span with class '_ao3e selectable-text copyable-text'
             try:
                 message_span = copyable_text_div.find_element(By.CSS_SELECTOR, "span._ao3e.selectable-text.copyable-text")
-                message_text = message_span.text
+                message_text = message_span.text.strip()
             except Exception:
                 message_text = ""
             if pre_plain_text:
@@ -75,7 +77,15 @@ def collect_messages(driver, chat_name):
 
                 # print(f"element message: {message_text.strip()}\n")
 
-                print(f"----- \n Chat Name: {chat_name} \n Sender: {name} \n Time: {iso_time} \n Nachricht: {message_text.strip()} \n -------")
+                # print(f"----- \n Chat Name: {chat_name} \n Sender: {name} \n Time: {iso_time} \n Nachricht: {message_text} \n -------")
+
+                print("messages.py: collect_messages(): Calling CreateWAMessageEntryService!")
+
+                result = await CreateWAMessageEntryService(chat_name, name, iso_time, message_text)
+
+                print(result)
+
+                time.sleep(100)
 
             else:
                 # fallback if no pre-plain-text

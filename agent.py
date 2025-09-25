@@ -1,10 +1,10 @@
-from dotenv import load_dotenv
-import logging
-
 from datetime import date
 
-from db.dbService import GetEntryService
+from dotenv import load_dotenv
+import logging
+import asyncio
 
+from db.dbService import GetEntryService
 from whatsapp_handling.main import collect_todays_messages
 
 from livekit import agents
@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
     # nach load_dotenv geht nicht, weil dann livekits multiprocessing greift und das Scraping dann mehrmals ausgeführt werden würde
     print("Whatsapp Scraping startet... ")
-    collect_todays_messages()
+    asyncio.run(collect_todays_messages())
     print("Whatsapp Scraping beendet... ")
 
 

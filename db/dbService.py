@@ -6,8 +6,11 @@ from db.dbSchema import PatientData
 
 from surrealdb import RecordID
 
-async def CreateEntryService(
-        entry, 
+async def CreateWAMessageEntryService(
+        chat_name, 
+        name, 
+        iso_time, 
+        message_text,
         db=None
     ):
     """Create an entry in the database"""
@@ -16,20 +19,21 @@ async def CreateEntryService(
         if db is None:
             db = await get_db()
             
-        print("CreateEntryService: ", entry)    
-        
-        # Handle both dictionary and Pydantic object
-        if isinstance(entry, dict):
-            entry_data = entry.copy()
-        else:
-            # If it's a Pydantic object, convert to dict
-            entry_data = entry.model_dump() if hasattr(entry, 'model_dump') else entry.dict()
-        
-        # Add today's date and time
-        
-        entry_data["created_datetime"] = datetime.now().isoformat()
+        # print("CreateEntryService: \n")    
+        # print(f"----- \n Chat Name: {chat_name} \n Sender: {name} \n Time: {iso_time} \n Nachricht: {message_text} \n -------")
 
-        result = await db.create("PatientenTermin", entry_data)
+        # Replace spaces with underscores in chat_name and name
+        chat_name = chat_name.replace(" ", "_")
+        name = name.replace(" ", "_")
+
+        # Create a record with a specific ID
+        result = await db.create(RecordID('Message', f'{chat_name}:{name}:{iso_time}'), {
+            "chat_name": chat_name,
+            "name": name,
+            "time": iso_time,
+            "message": message_text,
+            "entry_creation": datetime.now().isoformat()
+        })
         
         return {
             "status": "success", 

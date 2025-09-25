@@ -5,6 +5,8 @@ from datetime import date
 
 from db.dbService import GetEntryService
 
+from whatsapp_handling.main import collect_todays_messages
+
 from livekit import agents
 from livekit.agents import (
         AgentSession, 
@@ -28,11 +30,12 @@ logger = logging.getLogger("agent")
 
 load_dotenv()
 
+
 class Assistant(Agent):
     def __init__(self) -> None:
         # Stelle hier die Persönlichkeit des Agents ein
         super().__init__(
-            instructions="Du bist ein hilfsbereiter deutscher AI Bot"
+            instructions="Du bist mein Tagebuch. Sprich mich mit Philipp und lieb an."
         )
 
     @function_tool
@@ -51,13 +54,12 @@ class Assistant(Agent):
     @function_tool
     async def db_example(self, context: RunContext, search_string: str):
         '''
-        Verwende dieses Tool, um etwas in der Datenbank nachzuschauen
+        Verwende dieses Tool, um die Whatsapp Chats aus der Datenbank zu bekommen
         '''
         logger.info(f"Using the Database")
 
         return await GetEntryService(search_string=search_string)
 
-    
 
     # Beispiel Tool, was zeigt wie man erfolgreich zwei Parameter mit einer Funktion erfassen kann
     @function_tool
@@ -95,12 +97,19 @@ async def entrypoint(ctx: agents.JobContext):
 
     await ctx.connect()
 
-    # Designe hier den Workflow?
+    # Lege hier Luisa die  heutigen 
     await session.generate_reply(
-        instructions="Begrüße den Nutzer"
+        instructions=""
     )
     
     
 
 if __name__ == "__main__":
+
+    # nach load_dotenv geht nicht, weil dann livekits multiprocessing greift und das Scraping dann mehrmals ausgeführt werden würde
+    print("Whatsapp Scraping startet... ")
+    collect_todays_messages()
+    print("Whatsapp Scraping beendet... ")
+
+
     agents.cli.run_app(agents.WorkerOptions(entrypoint_fnc=entrypoint))

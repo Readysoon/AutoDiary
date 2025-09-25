@@ -1,3 +1,5 @@
-[50426:1301618:0921/175747.254698:INFO:components/enterprise/browser/controller/chrome_browser_cloud_management_controller.cc:206] No machine level policy manager exists.
-[50426:1301691:0921/175747.255357:ERROR:mojo/public/cpp/platform/named_platform_channel_mac.cc:44] bootstrap_check_in com.google.Chrome.apps.707e32e1522d11430a77d76b819910f7: Permission denied (1100)
-[50426:1301618:0921/175748.279127:INFO:CONSOLE:115] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yT/r/wxCGU7Ksj6f.js (115)
+[65762:1883736:0925/120457.938846:INFO:components/enterprise/browser/controller/chrome_browser_cloud_management_controller.cc:206] No machine level policy manager exists.
+[65762:1883736:0925/120459.642938:INFO:CONSOLE:115] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yp/r/nbNcBr5dvDh.js (115)
+[65762:1883847:0925/120600.201111:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[65762:1883861:0925/120617.004379:ERROR:base/process/process_mac.cc:53] task_policy_set TASK_CATEGORY_POLICY: (os/kern) invalid argument (4)
+[65762:1883861:0925/120617.004410:ERROR:base/process/process_mac.cc:98] task_policy_set TASK_SUPPRESSION_POLICY: (os/kern) invalid argument (4)

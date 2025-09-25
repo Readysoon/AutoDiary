@@ -83,9 +83,10 @@ async def collect_messages(driver, chat_name):
 
                 result = await CreateWAMessageEntryService(chat_name, name, iso_time, message_text)
 
-                print(result)
-
-                time.sleep(100)
+                if result:
+                    print("Entry was created!")
+                else:
+                    print("Entry already existed and was not created!")
 
             else:
                 # fallback if no pre-plain-text

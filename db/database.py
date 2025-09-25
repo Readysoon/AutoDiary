@@ -15,8 +15,8 @@ async def get_db():
     """Database dependency that provides a connected and authenticated SurrealDB instance"""
     db = None
     try:
-        print("This is the updated db connection 3")
-        print(DATABASE_URL, DATABASE_USER, DATABASE_PASS, DATABASE_NAMESPACE, DATABASE_NAME)
+        # print("This is the updated db connection 3")
+        # print(DATABASE_URL, DATABASE_USER, DATABASE_PASS, DATABASE_NAMESPACE, DATABASE_NAME)
         
         # Initialize the database connection
         db = AsyncSurreal(DATABASE_URL)

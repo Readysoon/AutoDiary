@@ -93,11 +93,19 @@ async def entrypoint(ctx: agents.JobContext):
     
 
 if __name__ == "__main__":
-
-    # nach load_dotenv geht nicht, weil dann livekits multiprocessing greift und das Scraping dann mehrmals ausgeführt werden würde
-    print("Whatsapp Scraping startet... ")
-    asyncio.run(collect_todays_messages())
-    print("Whatsapp Scraping beendet... ")
-
-
+    import threading
+    
+    # Define a wrapper function for the async scraping
+    def run_scraping():
+        print("Whatsapp Scraping startet... ")
+        asyncio.run(collect_todays_messages())
+        print("Whatsapp Scraping beendet... ")
+    
+    # Start scraping in background thread
+    print("Starting Scraping in background thread...")
+    scraping_thread = threading.Thread(target=run_scraping, daemon=True)
+    scraping_thread.start()
+    print("Background scraping thread finished.")
+    
+    # Start LiveKit Agent immediately (non-blocking)
     agents.cli.run_app(agents.WorkerOptions(entrypoint_fnc=entrypoint))

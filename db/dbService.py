@@ -26,26 +26,40 @@ async def CreateWAMessageEntryService(
         chat_name = chat_name.replace(" ", "_")
         name = name.replace(" ", "_")
 
-        # Create a record with a specific ID
-        result = await db.create(RecordID('Message', f'{chat_name}:{name}:{iso_time}'), {
-            "chat_name": chat_name,
-            "name": name,
-            "time": iso_time,
-            "message": message_text,
-            "entry_creation": datetime.now().isoformat()
-        })
+        search_result = await GetEntryService(chat_name, name, iso_time)
+
+        print(f"dbService.py: CreateWAMessageEntryService: Search result of GetEntryService: \n {search_result}")
+
+        if search_result:
+            print("Message already in DB!")
+
+        else: 
+            # Create a record with a specific ID
+            result = await db.create(RecordID('Message', f'{chat_name}:{name}:{iso_time}'), {
+                "chat_name": chat_name,
+                "name": name,
+                "time": iso_time,
+                "message": message_text,
+                "entry_creation": datetime.now().isoformat()
+            })
         
-        return {
-            "status": "success", 
-            "result": result
-        }
+            return {
+                "status": "success", 
+                "result": result
+            }
+        
 
     except Exception as e:
         raise Exception(f"Database operation failed: {str(e)}")
 
 
-async def GetEntryService(db=None, search_string=str):
-    """Get all entries from the database"""
+async def GetEntryService(
+        chat_name, 
+        name, 
+        iso_time, 
+        db=None
+    ):
+    """Get an Message entry by ID from the database"""
     try:     
         # If no db is provided, get one
         if db is None:
@@ -53,9 +67,9 @@ async def GetEntryService(db=None, search_string=str):
             
         print("GetEntryService: Fetching the entry")    
 
-        result = await db.select(RecordID('example_table', search_string))
+        result = await db.select(RecordID('Message', f'{chat_name}:{name}:{iso_time}'))
 
-        return result['Fenster']
+        return result
 
     except Exception as e:
         raise Exception(f"Database query failed: {str(e)}")

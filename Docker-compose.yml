@@ -1,0 +1,18 @@
+services:
+  surrealdb:
+    image: surrealdb/surrealdb:v1.5.5
+    container_name: surrealdb
+    ports:
+      - '8000:8000'
+    command:
+      - start 
+      - --log=trace 
+      - --user=root #default user
+      - --pass=root #default password
+    # the following 3 lines are for persistant memory for local development
+      - file:/data/database.db
+    volumes:
+      - ./surreal_data:/data
+    restart: always
+
+  whatsapp_scraper:

@@ -39,7 +39,7 @@ def convert_raw_result_to_proper_doc(results):
     # Build the formatted document
     document_lines = []
     document_lines.append("# WhatsApp Nachrichten")
-    document_lines.append("# Fasse die Chats in jeweils 3 - 4 Sätzen für Vormittag, Nachmittag, Abends zusammen, schließe daraus was am Tag passiert ist. ")
+    document_lines.append("# Fasse die Chats in jeweils 3 - 4 Sätzen für Vormittag, Nachmittag, Abends zusammen. Schließe daraus was am Tag passiert ist.")
     document_lines.append(f"Date: {results[0]['date'] if results else 'N/A'}")
     document_lines.append(f"Total Messages: {len(results)}")
     document_lines.append(f"Total Chats: {len(chats)}")

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import timedelta, datetime
 
 from dotenv import load_dotenv
 import logging
@@ -68,7 +68,7 @@ async def entrypoint(ctx: agents.JobContext):
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="de"),
         llm=openai.LLM(model="gpt-4o-mini"),
-        tts = cartesia.TTS(voice="b9de4a89-2257-424b-94c2-db18ba68c81a", language="de"),
+        tts = cartesia.TTS(voice="384b625b-da5d-49e8-a76d-a2855d4f31eb", language="de"),
         vad=silero.VAD.load(),
         turn_detection=MultilingualModel(),
     )
@@ -99,16 +99,16 @@ async def entrypoint(ctx: agents.JobContext):
     try:
         logger.info(f"Generiere WhatsApp Zusammenfassung des Tages...")
 
-        from datetime import timedelta, datetime
-        
-        today = (datetime.now() - timedelta(days=1)).date()
+        days_in_the_past = 0
+
+        today = (datetime.now() - timedelta(days=days_in_the_past)).date()
         day = today.isoformat()
 
         results = await GetAllTodaysEntriesService(day)
 
-        print(results)
-
         proper_todays_messages_doc = convert_raw_result_to_proper_doc(results)
+
+        print(proper_todays_messages_doc)
 
         await session.generate_reply(
             instructions=proper_todays_messages_doc
@@ -127,17 +127,17 @@ async def entrypoint(ctx: agents.JobContext):
 if __name__ == "__main__":
     import threading
     
- #   # Define a wrapper function for the async scraping
- #   def run_scraping():
- #       print("Whatsapp Scraping startet... ")
- #       asyncio.run(collect_todays_messages())
- #       print("Whatsapp Scraping beendet... ")
+    # Define a wrapper function for the async scraping
+    def run_scraping():
+        print("Whatsapp Scraping startet... ")
+        asyncio.run(collect_todays_messages())
+        print("Whatsapp Scraping beendet... ")
     
-#     # Start scraping in background thread
-#     print("Starting Scraping in background thread...")
-#     scraping_thread = threading.Thread(target=run_scraping, daemon=True)
-#     scraping_thread.start()
-#     print("Background scraping thread finished.")
+    # Start scraping in background thread
+    print("Starting Scraping in background thread...")
+    scraping_thread = threading.Thread(target=run_scraping, daemon=True)
+    scraping_thread.start()
+    print("Background scraping thread finished.")
     
     # Start LiveKit Agent immediately (non-blocking)
     agents.cli.run_app(agents.WorkerOptions(entrypoint_fnc=entrypoint))

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from re import search
 
 from db.database import get_db
@@ -26,6 +26,10 @@ async def CreateWAMessageEntryService(
         chat_name = chat_name.replace(" ", "_")
         name = name.replace(" ", "_")
 
+        dt = datetime.fromisoformat(iso_time)
+        date_str = dt.date().isoformat()  # e.g., "2025-09-25"
+        time_str = dt.time().isoformat()  # e.g., "16:02:00+02:00"
+
         search_result = await GetEntryService(chat_name, name, iso_time)
 
         print(f"dbService.py: CreateWAMessageEntryService: Search result of GetEntryService: \n {search_result}")
@@ -38,7 +42,8 @@ async def CreateWAMessageEntryService(
             result = await db.create(RecordID('Message', f'{chat_name}:{name}:{iso_time}'), {
                 "chat_name": chat_name,
                 "name": name,
-                "time": f"d'{iso_time}'",
+                "date": f"{date_str}",
+                "time": f"{time_str}",
                 "message": message_text,
                 "entry_creation": f"d'{datetime.now().isoformat()}'"
             })
@@ -65,11 +70,32 @@ async def GetEntryService(
         if db is None:
             db = await get_db()
             
-        print("GetEntryService: Fetching the entry")    
+        print(f"GetEntryService: Fetching the entry '{chat_name}:{name}:{iso_time}'")    
 
         result = await db.select(RecordID('Message', f'{chat_name}:{name}:{iso_time}'))
 
         return result
 
     except Exception as e:
-        raise Exception(f"Database query failed: {str(e)}")
+        raise Exception(f"Database query failed ({chat_name}:{name}:{iso_time}): {str(e)}")
+
+
+
+async def GetAllTodaysEntriesService(
+        day,
+        db=None
+    ):
+    """Get all Message entries from the database for today"""
+    if db is None:
+        db = await get_db()
+
+    print(f"GetAllTodaysEntriesService: Fetching all today's entries for '{day}'")
+
+    result = await db.query(
+        f"SELECT * FROM Message WHERE date = '{day}'"
+    )
+
+    return result
+
+    
+

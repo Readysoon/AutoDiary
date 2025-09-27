@@ -1,3 +1,6 @@
-2025/09/25-13:41:23.685 21fa51 Reusing MANIFEST /Users/philipp/Desktop/Web_Projects/AutoDiary/chrome_profile/Default/Local Storage/leveldb/MANIFEST-000001
-2025/09/25-13:41:23.688 21fa51 Recovering log #140
-2025/09/25-13:41:23.689 21fa51 Reusing old log /Users/philipp/Desktop/Web_Projects/AutoDiary/chrome_profile/Default/Local Storage/leveldb/000140.log 
+2025/09/27-09:04:03.808 77acad Reusing MANIFEST /Users/philipp/Desktop/Web_Projects/AutoDiary/chrome_profile/Default/Local Storage/leveldb/MANIFEST-000001
+2025/09/27-09:04:03.814 77acad Recovering log #154
+2025/09/27-09:04:03.816 77acad Reusing old log /Users/philipp/Desktop/Web_Projects/AutoDiary/chrome_profile/Default/Local Storage/leveldb/000154.log 
+2025/09/27-09:05:23.462 77acad Level-0 table #157: started
+2025/09/27-09:05:23.467 77acad Level-0 table #157: 17540 bytes OK
+2025/09/27-09:05:23.470 77acad Delete type=0 #154

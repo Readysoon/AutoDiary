@@ -2,10 +2,8 @@ from datetime import timedelta, datetime
 
 from dotenv import load_dotenv
 import logging
-import asyncio
 
 from db.dbService import GetAllTodaysEntriesService
-from whatsapp_handling.main import collect_todays_messages
 from agent_helpers.text_tools import convert_raw_result_to_proper_doc
 
 from livekit import agents
@@ -70,7 +68,8 @@ async def entrypoint(ctx: agents.JobContext):
         llm=openai.LLM(model="gpt-4o-mini"),
         tts = cartesia.TTS(voice="384b625b-da5d-49e8-a76d-a2855d4f31eb", language="de"),
         vad=silero.VAD.load(),
-        turn_detection=MultilingualModel(),
+        # turn_detection=MultilingualModel(), # disabled because it was causing errors when livekit wanted to download it from the internet but docker didnt want it
+        turn_detection=None
     )
 
     await session.start(
@@ -99,7 +98,7 @@ async def entrypoint(ctx: agents.JobContext):
     try:
         logger.info(f"Generiere WhatsApp Zusammenfassung des Tages...")
 
-        days_in_the_past = 0
+        days_in_the_past = 1
 
         today = (datetime.now() - timedelta(days=days_in_the_past)).date()
         day = today.isoformat()
@@ -126,18 +125,6 @@ async def entrypoint(ctx: agents.JobContext):
 
 if __name__ == "__main__":
     import threading
-    
-    # Define a wrapper function for the async scraping
-    def run_scraping():
-        print("Whatsapp Scraping startet... ")
-        asyncio.run(collect_todays_messages())
-        print("Whatsapp Scraping beendet... ")
-    
-    # Start scraping in background thread
-    print("Starting Scraping in background thread...")
-    scraping_thread = threading.Thread(target=run_scraping, daemon=True)
-    scraping_thread.start()
-    print("Background scraping thread finished.")
     
     # Start LiveKit Agent immediately (non-blocking)
     agents.cli.run_app(agents.WorkerOptions(entrypoint_fnc=entrypoint))

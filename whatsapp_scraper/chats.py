@@ -2,7 +2,7 @@ import time
 
 from selenium.webdriver.common.by import By
 
-from whatsapp_handling.messages import collect_messages
+from whatsapp_scraper.messages import collect_messages
 
 
 

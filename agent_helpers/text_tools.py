@@ -1,3 +1,4 @@
+from collections import defaultdict
 
 
 
@@ -11,10 +12,7 @@ def convert_raw_result_to_proper_doc(results):
         
     Returns:
         str: Formatted document with grouped and sorted messages
-    """
-    from collections import defaultdict
-    from datetime import datetime
-    
+    """    
     # Group messages by chat_name
     chats = defaultdict(list)
     

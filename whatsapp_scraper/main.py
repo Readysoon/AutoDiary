@@ -2,7 +2,7 @@ import time
 import json
 
 
-from whatsapp_handling.chats import iterate_chats
+from whatsapp_scraper.chats import iterate_chats
 
 
 from selenium import webdriver
@@ -56,4 +56,4 @@ async def collect_todays_messages():
             print("Probably loading or some error ...")
 
             time.sleep(5)
-# 
+

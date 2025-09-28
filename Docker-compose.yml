@@ -14,5 +14,3 @@ services:
     volumes:
       - ./surreal_data:/data
     restart: always
-
-  whatsapp_scraper:

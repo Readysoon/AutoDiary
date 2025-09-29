@@ -29,12 +29,21 @@ logger = logging.getLogger("agent")
 
 load_dotenv()
 
+name = "Philipp"
+
 
 class Assistant(Agent):
     def __init__(self) -> None:
         # Stelle hier die Persönlichkeit des Agents ein
         super().__init__(
-            instructions="Du bist mein (Philipps) Tagebuch. Antworte kurz und bündig."
+            instructions=(
+                "Du bist eine KI, die als persönlicher Tagebuchbegleiter fungiert. "
+                "Deine Aufgabe ist es, dem Nutzer zu helfen, seine Gedanken zu reflektieren. "
+                "Sprich freundlich, empathisch und respektvoll. "
+                "Stelle gelegentlich offene Fragen, um zum Nachdenken anzuregen, z. B. „Wie hast du dich dabei gefühlt?“. "
+                "Vermeide Ratschläge, es sei denn, der Nutzer bittet darum. "
+                "Verwende eine ruhige, sanfte Sprache und fasse am Ende jedes Eintrags die wichtigsten Gedanken zusammen."
+            )
         )
 
 #     @function_tool
@@ -85,11 +94,6 @@ async def entrypoint(ctx: agents.JobContext):
 
     await ctx.connect()
 
-    # Lege hier Luisa die heutigen Nachrichten vor
-    await session.generate_reply(
-        instructions="Hallo Philipp, das ist vor der Zusammenfassung des Tages."
-    )
-
     # Flow unterbrechen um Nachrichten das Tages zu scrapen und zusammenzufassen und durchzulesen
     session.interrupt()
 
@@ -115,12 +119,6 @@ async def entrypoint(ctx: agents.JobContext):
 
     finally:
         session.input.set_audio_enabled(True) # start listening again
-
-    # Lege hier Luisa die heutigen Nachrichten vor
-    await session.generate_reply(
-        instructions="Hallo Philipp, und das danach."
-    )
-    
     
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 
-
+# !! almost purely AI generated Code !!
 def convert_raw_result_to_proper_doc(results):
     """
     Convert raw database results into a properly formatted document for the agent.
@@ -33,10 +33,20 @@ def convert_raw_result_to_proper_doc(results):
     # Sort messages within each chat chronologically by time
     for chat_name in chats:
         chats[chat_name].sort(key=lambda x: x['time'])
-    
+
+    # Count all names and take the most common as the sender_name
+    from collections import Counter
+    if results:
+        name_counts = Counter(msg.get('name', '') for msg in results if 'name' in msg and msg['name'])
+        sender_name = name_counts.most_common(1)[0][0] if name_counts else "Nutzer"
+    else:
+        sender_name = "Nutzer"
+
     # Build the formatted document
     document_lines = []
     document_lines.append("# WhatsApp Nachrichten")
+    # Get the sender's name from the first message if available, else use a placeholder
+    document_lines.append(f'# Du bist {sender_name}s Tagebuch. Sprich mich mit Namen an und antworte kurz und bündig.')
     document_lines.append("# Fasse die Chats in jeweils 3 - 4 Sätzen für Vormittag, Nachmittag, Abends zusammen. Schließe daraus was am Tag passiert ist.")
     document_lines.append(f"Date: {results[0]['date'] if results else 'N/A'}")
     document_lines.append(f"Total Messages: {len(results)}")

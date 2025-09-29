@@ -29,7 +29,13 @@ logger = logging.getLogger("agent")
 
 load_dotenv()
 
-name = "Philipp"
+
+# generiere das heute, gestrige oder vorgestrige Datum und verwende es für die Datenbanksuche
+days_in_the_past = 1
+today = (datetime.now() - timedelta(days=days_in_the_past)).date()
+day = today.isoformat()
+
+sender_name = "Philipp"
 
 
 class Assistant(Agent):
@@ -40,21 +46,35 @@ class Assistant(Agent):
                 "Du bist eine KI, die als persönlicher Tagebuchbegleiter fungiert. "
                 "Deine Aufgabe ist es, dem Nutzer zu helfen, seine Gedanken zu reflektieren. "
                 "Sprich freundlich, empathisch und respektvoll. "
-                "Stelle gelegentlich offene Fragen, um zum Nachdenken anzuregen, z. B. „Wie hast du dich dabei gefühlt?“. "
+                "Stelle gelegentlich offene Fragen, um zum Nachdenken anzuregen, z. B. „Wie hast du dich dabei gefühlt? "
                 "Vermeide Ratschläge, es sei denn, der Nutzer bittet darum. "
                 "Verwende eine ruhige, sanfte Sprache und fasse am Ende jedes Eintrags die wichtigsten Gedanken zusammen."
             )
         )
 
-#     @function_tool
-#     async def date_example(self, context: RunContext):
-#         '''
-#         Verwende diese Tool um das Datum aufzurufen
-#         '''
-# 
-#         logger.info(f"Looking up the date")
-# 
-#         return str(date.today())
+    @function_tool
+    async def Whatsapp_Zusammenfassung(self, context: RunContext):
+        '''
+        Verwende dieses Tool, um die Zusammenfassung des Tages zu erhalten und mit dem Nutzer durchzugehen
+        '''
+
+        try:
+
+            logger.info(f"Tool: Generiere Whatsapp Chats Zusammenfassung des Tages '{day}'")
+
+            results = await GetAllTodaysEntriesService(day)
+
+            proper_todays_messages_doc, sender_name = convert_raw_result_to_proper_doc(results)
+
+            print(proper_todays_messages_doc)
+
+            logger.info(f"Erfolgreich Tag '{day}' für {sender_name} zusammengefasst.")
+        
+        except Exception as e:
+            raise Exception(f"Tool: Zusammenfassung Generierung fehlgeschlagen: {e} ")
+
+        return proper_todays_messages_doc
+
 
 
 #     # Tool, mit dem für Luiza ein Dokument mit den WhatsApp Nachrichten des Tages generiert wird und Sie es sich durchlesen kann 
@@ -67,8 +87,6 @@ class Assistant(Agent):
 # 
 # 
 #         # return TodaysMessages
-
-        
 
 
 async def entrypoint(ctx: agents.JobContext):
@@ -94,31 +112,21 @@ async def entrypoint(ctx: agents.JobContext):
 
     await ctx.connect()
 
-    # Flow unterbrechen um Nachrichten das Tages zu scrapen und zusammenzufassen und durchzulesen
-    session.interrupt()
-
-    session.input.set_audio_enabled(False) # stop listening
-
     try:
-        logger.info(f"Generiere WhatsApp Zusammenfassung des Tages...")
+        logger.info(f"Sage hallo zum Nutzer...")
 
-        days_in_the_past = 1
-
-        today = (datetime.now() - timedelta(days=days_in_the_past)).date()
-        day = today.isoformat()
-
-        results = await GetAllTodaysEntriesService(day)
-
-        proper_todays_messages_doc = convert_raw_result_to_proper_doc(results)
-
-        print(proper_todays_messages_doc)
+#         results = await GetAllTodaysEntriesService(day)
+# 
+#         proper_todays_messages_doc, sender_name = convert_raw_result_to_proper_doc(results)
 
         await session.generate_reply(
-            instructions=proper_todays_messages_doc
+            instructions=f"Sag Hallo zu {sender_name}, frag ihn wies ihm geht und ob er mit dir den Tag zusammenfassen will (-> verwendung von Whatsapp_Zusammenfassung bei Ja)"
         )
 
-    finally:
-        session.input.set_audio_enabled(True) # start listening again
+        logger.info(f"Sagte hallo zu {sender_name} ...")
+
+    except Exception as e:
+        raise Exception(f"Saying hello didnt work...: {e}")
     
 
 if __name__ == "__main__":

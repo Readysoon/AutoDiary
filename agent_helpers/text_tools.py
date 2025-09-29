@@ -45,8 +45,6 @@ def convert_raw_result_to_proper_doc(results):
     # Build the formatted document
     document_lines = []
     document_lines.append("# WhatsApp Nachrichten")
-    # Get the sender's name from the first message if available, else use a placeholder
-    document_lines.append(f'# Du bist {sender_name}s Tagebuch. Sprich mich mit Namen an und antworte kurz und bündig.')
     document_lines.append("# Fasse die Chats in jeweils 3 - 4 Sätzen für Vormittag, Nachmittag, Abends zusammen. Schließe daraus was am Tag passiert ist.")
     document_lines.append(f"Date: {results[0]['date'] if results else 'N/A'}")
     document_lines.append(f"Total Messages: {len(results)}")
@@ -72,5 +70,5 @@ def convert_raw_result_to_proper_doc(results):
         document_lines.append("---")
         document_lines.append("")
     
-    return "\n".join(document_lines)
+    return "\n".join(document_lines), sender_name
     

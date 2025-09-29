@@ -9,8 +9,8 @@ start:
 	@echo "Waiting for database to be ready..."
 	sleep 3
 	@echo "Running WhatsApp scraper..."
-	source venv/bin/activate && python -c "import asyncio; from whatsapp_scraper.main import collect_todays_messages; asyncio.run(collect_todays_messages())" &
-	@echo "Scraper started in background, now starting LiveKit Agent..."
+	source venv/bin/activate && python -c "import asyncio; from whatsapp_scraper.main import collect_todays_messages; asyncio.run(collect_todays_messages())"
+	@echo "Scraper completed, now starting LiveKit Agent..."
 	sleep 2
 	source venv/bin/activate && python agent.py console
 

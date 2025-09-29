@@ -124,7 +124,6 @@ async def entrypoint(ctx: agents.JobContext):
     
 
 if __name__ == "__main__":
-    import threading
-    
-    # Start LiveKit Agent immediately (non-blocking)
+    # Then start LiveKit Agent
+    print("Starting LiveKit Agent...")
     agents.cli.run_app(agents.WorkerOptions(entrypoint_fnc=entrypoint))

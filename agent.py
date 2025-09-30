@@ -113,7 +113,6 @@ async def entrypoint(ctx: agents.JobContext):
 
     await ctx.connect()
 
-
     await session.generate_reply(
         instructions=f"Sag Hallo zu {sender_name}, frag ihn wies ihm geht und ob er mit dir den Tag zusammenfassen will (-> verwendung von Whatsapp_Zusammenfassung bei Ja). Nach der Zusammenfassung (falls gewünscht), frag ob er einen Tagebucheintrag erstellen möchte und verwende in dem Fall das function_tool 'Tagebucheintrag_erstellen'.."
     )

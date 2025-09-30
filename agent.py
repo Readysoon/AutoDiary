@@ -31,7 +31,7 @@ load_dotenv()
 
 
 # generiere das heute, gestrige oder vorgestrige Datum und verwende es für die Datenbanksuche
-days_in_the_past = 1
+days_in_the_past = 0
 today = (datetime.now() - timedelta(days=days_in_the_past)).date()
 day = today.isoformat()
 
@@ -85,10 +85,9 @@ class Assistant(Agent):
         '''
         try: 
             result = await CreateDiaryEntryService(entry)
+            return f"Tagebucheintrag erfolgreich erstellt! ID: {result['result']['id']}"
         except Exception as e:
             raise Exception(f"Could not create diary entry: {e}")
-
-        return result
 
 
 async def entrypoint(ctx: agents.JobContext):
@@ -116,13 +115,8 @@ async def entrypoint(ctx: agents.JobContext):
 
 
     await session.generate_reply(
-        instructions=f"Sag Hallo zu {sender_name}, frag ihn wies ihm geht und ob er mit dir den Tag zusammenfassen will (-> verwendung von Whatsapp_Zusammenfassung bei Ja)"
+        instructions=f"Sag Hallo zu {sender_name}, frag ihn wies ihm geht und ob er mit dir den Tag zusammenfassen will (-> verwendung von Whatsapp_Zusammenfassung bei Ja). Nach der Zusammenfassung (falls gewünscht), frag ob er einen Tagebucheintrag erstellen möchte und verwende in dem Fall das function_tool 'Tagebucheintrag_erstellen'.."
     )
-
-    await session.generate_reply(
-        instructions=f"Frag {sender_name}, ob er einen Tagebucheintrag mit dir erstellen möchte. Gehe diesen Tagebucheintrag solange mit ihm/ihr durch, bis er/sie zufrieden damit ist und verwende das function_tool 'Tagebucheintrag_erstellen'."
-    )
-    
 
 if __name__ == "__main__":
     # Then start LiveKit Agent

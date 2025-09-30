@@ -122,3 +122,13 @@ async def CreateDiaryEntryService(
     except Exception as e:
         raise Exception(f"Creating the diary entry didnt work: \n Error: \n{e} \n Text: \n{entry}")
 
+
+async def GetDiaryEntryService(
+        date: str,
+        db=None
+    ):
+    try: 
+        if db is None:
+            db = await get_db()
+
+        print(f"GetDiaryEntryService: Trying to get {date}s diary entry.")

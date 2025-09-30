@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 from dotenv import load_dotenv
 import logging
 
-from db.dbService import GetAllTodaysEntriesService
+from db.dbService import GetAllTodaysEntriesService, CreateDiaryEntryService
 from agent_helpers.text_tools import convert_raw_result_to_proper_doc
 
 from livekit import agents
@@ -45,7 +45,7 @@ class Assistant(Agent):
             instructions=(
                 "Du bist eine KI, die als persönlicher Tagebuchbegleiter fungiert. "
                 "Deine Aufgabe ist es, dem Nutzer zu helfen, seine Gedanken zu reflektieren. "
-                "Sprich freundlich, empathisch und respektvoll. "
+                "Sprich freundlich, empathisch und respektvoll, aber halte dich eher kurz"
                 "Stelle gelegentlich offene Fragen, um zum Nachdenken anzuregen, z. B. „Wie hast du dich dabei gefühlt? "
                 "Vermeide Ratschläge, es sei denn, der Nutzer bittet darum. "
                 "Verwende eine ruhige, sanfte Sprache und fasse am Ende jedes Eintrags die wichtigsten Gedanken zusammen."
@@ -77,16 +77,18 @@ class Assistant(Agent):
 
 
 
-#     # Tool, mit dem für Luiza ein Dokument mit den WhatsApp Nachrichten des Tages generiert wird und Sie es sich durchlesen kann 
-#     @function_tool
-#     async def get_all_todays_messages(self, context: RunContext):
-#         '''
-#         Verwende dieses Tool, um alle Nachrichten von heute durchzulesen
-#         '''
-# 
-# 
-# 
-#         # return TodaysMessages
+    # 
+    @function_tool
+    async def Tagebucheintrag_erstellen(self, context: RunContext, entry: str):
+        '''
+        Verwende dieses Tool, um einen Tagebucheintrag zu erstellen.
+        '''
+        try: 
+            result = await CreateDiaryEntryService(entry)
+        except Exception as e:
+            raise Exception(f"Could not create diary entry: {e}")
+
+        return result
 
 
 async def entrypoint(ctx: agents.JobContext):
@@ -115,6 +117,10 @@ async def entrypoint(ctx: agents.JobContext):
 
     await session.generate_reply(
         instructions=f"Sag Hallo zu {sender_name}, frag ihn wies ihm geht und ob er mit dir den Tag zusammenfassen will (-> verwendung von Whatsapp_Zusammenfassung bei Ja)"
+    )
+
+    await session.generate_reply(
+        instructions=f"Frag {sender_name}, ob er einen Tagebucheintrag mit dir erstellen möchte. Gehe diesen Tagebucheintrag solange mit ihm/ihr durch, bis er/sie zufrieden damit ist und verwende das function_tool 'Tagebucheintrag_erstellen'."
     )
     
 

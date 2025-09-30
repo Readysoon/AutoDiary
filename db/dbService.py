@@ -132,3 +132,29 @@ async def GetDiaryEntryService(
             db = await get_db()
 
         print(f"GetDiaryEntryService: Trying to get {date}s diary entry.")
+
+        if date == "heute":
+            days_in_the_past = 0
+        elif date == "gestern": 
+            days_in_the_past = 1
+        elif date == "vorgestern":
+            days_in_the_past = 2
+        else:
+            raise Exception(f"date was nor heute, gestern or vorgestern ({date}): {e}")
+        
+        
+        today = (datetime.now() - timedelta(days=days_in_the_past)).date()
+        day = today.isoformat()
+
+        result = await db.query(
+            f"SELECT diary_entry FROM Entry WHERE entry_creation LIKE 'd\'{day}%'"
+        )
+
+        print(f"GetDiaryEntryService ({date}): {result}")
+
+        return result
+
+    
+
+    except Exception as e:
+        raise Exception(f"Couldnt get diary for {date}: {e}")

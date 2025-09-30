@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 from dotenv import load_dotenv
 import logging
 
-from db.dbService import GetAllTodaysEntriesService, CreateDiaryEntryService
+from db.dbService import GetAllTodaysEntriesService, CreateDiaryEntryService, GetDiaryEntryService
 from agent_helpers.text_tools import convert_raw_result_to_proper_doc
 
 from livekit import agents
@@ -76,8 +76,6 @@ class Assistant(Agent):
         return proper_todays_messages_doc
 
 
-
-    # 
     @function_tool
     async def Tagebucheintrag_erstellen(self, context: RunContext, entry: str):
         '''
@@ -88,6 +86,19 @@ class Assistant(Agent):
             return f"Tagebucheintrag erfolgreich erstellt! ID: {result['result']['id']}"
         except Exception as e:
             raise Exception(f"Could not create diary entry: {e}")
+
+    
+    @function_tool
+    async def Tagebucheintrag_suchen(self, context: RunContext, date:str):
+        '''
+        Verwende dieses Tool, um nach einem Tagebucheintrag zu suchen, du kannst 'heute', 'gestern' oder 'vorgestern' als Datum für die Suche nach dem Tagebucheintrag zu verwenden.
+        '''
+        try:
+            result = await GetDiaryEntryService(date)
+            return f"Tagebucheintrag für {date}: \n {result}"
+
+        except Exception as e:
+            raise Exception(f"Konnte nicht nach dem Tagebucheintrag für '{date}' suchen: {e}")
 
 
 async def entrypoint(ctx: agents.JobContext):

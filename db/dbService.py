@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from re import search
 
 from db.database import get_db
-from db.dbSchema import PatientData
 
 from surrealdb import RecordID
 

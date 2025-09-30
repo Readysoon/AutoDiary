@@ -112,21 +112,10 @@ async def entrypoint(ctx: agents.JobContext):
 
     await ctx.connect()
 
-    try:
-        logger.info(f"Sage hallo zum Nutzer...")
 
-#         results = await GetAllTodaysEntriesService(day)
-# 
-#         proper_todays_messages_doc, sender_name = convert_raw_result_to_proper_doc(results)
-
-        await session.generate_reply(
-            instructions=f"Sag Hallo zu {sender_name}, frag ihn wies ihm geht und ob er mit dir den Tag zusammenfassen will (-> verwendung von Whatsapp_Zusammenfassung bei Ja)"
-        )
-
-        logger.info(f"Sagte hallo zu {sender_name} ...")
-
-    except Exception as e:
-        raise Exception(f"Saying hello didnt work...: {e}")
+    await session.generate_reply(
+        instructions=f"Sag Hallo zu {sender_name}, frag ihn wies ihm geht und ob er mit dir den Tag zusammenfassen will (-> verwendung von Whatsapp_Zusammenfassung bei Ja)"
+    )
     
 
 if __name__ == "__main__":

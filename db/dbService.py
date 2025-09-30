@@ -97,5 +97,29 @@ async def GetAllTodaysEntriesService(
 
     return result
 
+
+async def CreateDiaryEntryService(
+        entry=str,
+        db=None
+    ):
+    try: 
+        '''Create a diary entry!'''
+        if db is None: 
+            db = await get_db()
+
+        print("Creating a diary entry.")
+
+        # Create a record with a specific ID
+        result = await db.create(RecordID('Entry', f'{datetime.now().isoformat()}'), {
+            "diary_entry": entry,
+            "entry_creation": f"d'{datetime.now().isoformat()}'"
+        })
+        
+        return {
+            "status": "success", 
+            "result": result
+        }
     
+    except Exception as e:
+        raise Exception(f"Creating the diary entry didnt work: \n Error: \n{e} \n Text: \n{entry}")
 
